@@ -38,6 +38,9 @@ if __name__ == "__main__":
     act220hdr2D["LATPOLE"] = act220hdr["LATPOLE"]
     act220hdr2D["RADESYS"] = act220hdr["RADESYS"]
     
+    print(wisehphdr)
+    print(act220hdr2D)
+    
     time0 = time.time()
     reproj_wise, footprint = reproject_from_healpix((wisehpdata, wisehphdr), act220hdr2D, nested=False)
     time1 = time.time()
