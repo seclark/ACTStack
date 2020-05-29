@@ -58,9 +58,11 @@ def stack_slicedata(stackthese_data, stackon_data, cubenx=11, cubeny=11):
             stopx = np.int(min(maxnx, _x + cubehalfx + 1))
             starty = np.int(max(0, _y - cubehalfy))
             stopy = np.int(min(maxny, _y + cubehalfy + 1))
-
-            stackslice[smallstarty:smallstopy, :] += centerval * stackthese_data[starty:stopy, startx:stopx]    
-            weightslice[smallstarty:smallstopy, :] += centerval
+            try:
+                stackslice[smallstarty:smallstopy, :] += centerval * stackthese_data[starty:stopy, startx:stopx]    
+                weightslice[smallstarty:smallstopy, :] += centerval
+            except:
+                print(startx, stopx, starty, stopy, "small", smallstarty, smallstopy, stackslice[smallstarty:smallstopy, :].shape, stackthese_data[starty:stopy, startx:stopx].shape)
 
         else:
             pass
