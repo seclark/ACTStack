@@ -1,5 +1,6 @@
 import numpy as np
 from astropy.io import fits
+from scipy import ndimage
 import h5py
 
 def gaussian_umask(data, fwhm=10, zeroed=False):
