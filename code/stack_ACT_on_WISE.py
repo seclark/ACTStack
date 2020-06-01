@@ -32,10 +32,10 @@ def stack_slicedata(stackthese_data, stackon_data, cubenx=11, cubeny=11):
     # Define stackable region -- just skip the edges
     stackable = np.copy(stackon_data) #np.ones(stackon_data.shape)
     row, col = np.indices(stackable.shape)
-    stackable[np.where(row < cubehalfx + 1)] = 0
-    stackable[np.where(row > maxnx - cubehalfx - 1)] = 0
-    stackable[np.where(col < cubehalfy + 1)] = 0
-    stackable[np.where(col > maxny - cubehalfy - 1)] = 0
+    stackable[np.where(row < cubehalfy)] = 0
+    stackable[np.where(row > maxny - cubehalfy - 1)] = 0
+    stackable[np.where(col < cubehalfx)] = 0
+    stackable[np.where(col > maxnx - cubehalfx - 1)] = 0
     
     nonzeroyx = np.nonzero(stackable)
     nonzeroy = nonzeroyx[0]
