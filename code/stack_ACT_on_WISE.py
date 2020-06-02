@@ -3,7 +3,7 @@ from astropy.io import fits
 from scipy import ndimage
 import h5py
 
-def gaussian_umask(data, fwhm=10, zeroed=False):
+def gaussian_umask(data, fwhm=10, zeroed=True):
     """
     fwhm in arcmin aka pixels
     """
@@ -96,7 +96,11 @@ if __name__ == "__main__":
     ACTPsub = np.sqrt(ACTQsub**2 + ACTUsub**2)
     
     # Stack on unsharp masked WISE data
-    WISEsub_umask30 = gaussian_umask(WISEsub, fwhm=30/actpixelsize_arcmin)
+    WISEsub_umask30 = gaussian_umask(WISEsub, fwhm=30/actpixelsize_arcmin, zeroed=True)
+    
+    # Zero out anomalously high values
+    clipdata = np.percentile(WISEsub_umask30[WISEsub_umask30 > 0], 99)
+    WISEsub_umask30[WISEsub_umask30 > clipdata] = 0.
     
     size = 101
     stackI, weightI = stack_slicedata(ACTIsub, WISEsub_umask30, cubenx=size, cubeny=size)
@@ -104,7 +108,7 @@ if __name__ == "__main__":
     stackU, weightU = stack_slicedata(ACTUsub, WISEsub_umask30, cubenx=size, cubeny=size)
     stackP, weightP = stack_slicedata(ACTPsub, WISEsub_umask30, cubenx=size, cubeny=size)
     
-    outfn = dataroot + "stacked_ACTonWISEumask_x{}_{}_y{}_{}_size{}.h5".format(xstart, xstop, ystart, ystop, size)
+    outfn = dataroot + "stacked_ACTonWISEumask_x{}_{}_y{}_{}_size{}_WISEclip.h5".format(xstart, xstop, ystart, ystop, size)
     with h5py.File(outfn, 'w') as f:
         Istack = f.create_dataset(name='stackI', data=stackI)
         Qstack = f.create_dataset(name='stackQ', data=stackQ)
