@@ -75,7 +75,9 @@ if __name__ == "__main__":
     dataroot = "../data/"
     WISE12 = fits.getdata(dataroot+"WISE_8192_on_ACT.fits")
     
-    ACTfn = dataroot+"act_planck_s08_s18_cmb_f220_daynight_map_feb.fits"
+    #ACTfn = dataroot+"act_planck_s08_s18_cmb_f220_daynight_map_feb.fits"
+    mapname = "act_planck_s08_s19_cmb_f220_daynight_map"
+    ACTfn = dataroot+"{}.fits".format(mapname)
     ACT220 = fits.getdata(ACTfn)
     act220hdr = fits.getheader(ACTfn)
     actpixelsize_arcmin = act220hdr["CDELT2"]*60 # pixel size in arcminutes
@@ -108,7 +110,7 @@ if __name__ == "__main__":
     stackU, weightU = stack_slicedata(ACTUsub, WISEsub_umask30, cubenx=size, cubeny=size)
     stackP, weightP = stack_slicedata(ACTPsub, WISEsub_umask30, cubenx=size, cubeny=size)
     
-    outfn = dataroot + "stacked_ACTonWISEumask_x{}_{}_y{}_{}_size{}_WISEclip.h5".format(xstart, xstop, ystart, ystop, size)
+    outfn = dataroot + "stacked_{}_ACTonWISEumask_x{}_{}_y{}_{}_size{}_WISEclip.h5".format(mapname, xstart, xstop, ystart, ystop, size)
     with h5py.File(outfn, 'w') as f:
         Istack = f.create_dataset(name='stackI', data=stackI)
         Qstack = f.create_dataset(name='stackQ', data=stackQ)
